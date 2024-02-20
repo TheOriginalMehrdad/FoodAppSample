@@ -5,12 +5,12 @@
 
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/light_gray</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/light_gray</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/dark_gray</item>
 
-        <item name="colorSecondary">@color/dark_gray</item>
+        <item name="colorSecondary">@color/light_gray</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/dark_gray</item>
+        <item name="colorSecondaryVariant">#DFDFDF</item>
 
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>

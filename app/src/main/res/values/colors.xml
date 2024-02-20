@@ -4,9 +4,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="light_orange">#FF5722</color>
-    <color name="dark_orange">#E64A19</color>
+    <color name="dark_orange">#CA4319</color>
 
     <color name="dark_gray">#222430</color>
     <color name="light_gray">#343749</color>
+
+    <color name="yellow">#FDD835</color>
 
 </resources>
