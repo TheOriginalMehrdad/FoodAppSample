@@ -2,9 +2,13 @@ package com.example.foodappsample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodappsample.databinding.ActivityMainBinding
+import com.example.foodappsample.databinding.DialogAddNewItemBinding
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -130,5 +134,82 @@ class MainActivity : AppCompatActivity() {
         binding.recycleViewMain.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
+
+        // Adding new food items
+        binding.btnAdd.setOnClickListener {
+
+            val dialog = AlertDialog.Builder(this).create()
+            val dialogBinding = DialogAddNewItemBinding.inflate(layoutInflater)
+
+            dialog.setView(dialogBinding.root)
+            dialog.setCancelable(true)
+
+            dialog.show()
+
+            dialogBinding.dialogBtnDone.setOnClickListener {
+
+                if (
+                    dialogBinding.dialogFoodName.length() > 0 &&
+                    dialogBinding.dialogFoodPrice.length() > 0 &&
+                    dialogBinding.dialogFoodDistance.length() > 0 &&
+                    dialogBinding.dialogFoodCity.length() > 0
+                ) {
+
+                    // For getting basic food info
+                    val txtName = dialogBinding.dialogFoodName.text.toString()
+                    val txtPrice = dialogBinding.dialogFoodPrice.text.toString()
+                    val txtDistance = dialogBinding.dialogFoodDistance.text.toString()
+                    val txtCity = dialogBinding.dialogFoodCity.text.toString()
+                    val randomRatingNumber: Int = (1..150).random()
+
+                    // For getting random star
+                    val min = 0f
+                    val max = 5f
+                    val random = min + Random.nextFloat() * (max - min)
+                    val randomRatingStarBar: Float = random
+
+                    // For getting random image
+                    val randomNumber = (1..11).random()
+                    val randomUrlPic = foodList[randomNumber].imageUrlData
+
+                    // Creating a new item
+                    val newFood = Food(
+                        txtName,
+                        txtPrice,
+                        txtDistance,
+                        txtCity,
+                        randomUrlPic,
+                        randomRatingNumber,
+                        randomRatingStarBar
+                    )
+                    myAdapter.addNewFood(newFood)
+                    binding.recycleViewMain.smoothScrollToPosition(0)
+                    dialog.dismiss()
+
+                } else {
+                    Toast.makeText(this, "Please fill all the sections", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

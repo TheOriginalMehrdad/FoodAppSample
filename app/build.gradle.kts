@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.foodappsample"
-    compileSdk = 34
+    compileSdk= 34
 
     buildFeatures {
         viewBinding = true
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.example.foodappsample"
         minSdk = 28
-        targetSdk = 34
+        targetSdk= 34
         versionCode = 1
         versionName = "1.0"
 

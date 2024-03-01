@@ -58,4 +58,11 @@ class FoodAdapter(private val data: ArrayList<Food>) :
 
         holder.bindData(position)
     }
+
+    fun addNewFood(newFood: Food) {
+
+        // Add new item to recycler view
+        data.add(0, newFood)
+        notifyItemInserted(0)
+    }
 }
