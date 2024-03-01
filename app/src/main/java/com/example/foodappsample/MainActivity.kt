@@ -2,17 +2,22 @@ package com.example.foodappsample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodappsample.databinding.ActivityMainBinding
 import com.example.foodappsample.databinding.DialogAddNewItemBinding
+import com.example.foodappsample.databinding.DialogDeleteItemBinding
+import com.example.foodappsample.databinding.DialogUpdateItemBinding
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var myAdapter: FoodAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -128,7 +133,9 @@ class MainActivity : AppCompatActivity() {
                 2.5f
             ),
         )
-        val myAdapter = FoodAdapter(foodList)
+        myAdapter = FoodAdapter(
+            foodList.clone() as ArrayList<Food>, this
+        )
 
         binding.recycleViewMain.adapter = myAdapter
         binding.recycleViewMain.layoutManager =
@@ -190,9 +197,79 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Please fill all the sections", Toast.LENGTH_SHORT).show()
                 }
             }
+            dialogBinding.dialogBtnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
 
         }
 
+    }
+
+    override fun onFoodClicked(food: Food, position: Int) {
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogUpdateBinding = DialogUpdateItemBinding.inflate(layoutInflater)
+        dialog.setView(dialogUpdateBinding.root)
+        dialog.setCancelable(true)
+        dialog.show()
+
+        dialogUpdateBinding.dialogFoodName.setText(food.subjectData)
+        dialogUpdateBinding.dialogFoodCity.setText(food.cityData)
+        dialogUpdateBinding.dialogFoodDistance.setText(food.distanceData)
+        dialogUpdateBinding.dialogFoodPrice.setText(food.priceData)
+
+        dialogUpdateBinding.dialogUpdateBtnDone.setOnClickListener {
+
+            if (
+                dialogUpdateBinding.dialogFoodName.length() > 0 &&
+                dialogUpdateBinding.dialogFoodPrice.length() > 0 &&
+                dialogUpdateBinding.dialogFoodDistance.length() > 0 &&
+                dialogUpdateBinding.dialogFoodCity.length() > 0
+            ) {
+                val txtName = dialogUpdateBinding.dialogFoodName.text.toString()
+                val txtPrice = dialogUpdateBinding.dialogFoodPrice.text.toString()
+                val txtDistance = dialogUpdateBinding.dialogFoodDistance.text.toString()
+                val txtCity = dialogUpdateBinding.dialogFoodCity.text.toString()
+
+                // Create an object from updated food
+                val updatedFood = Food(
+                    txtName,
+                    txtPrice,
+                    txtDistance,
+                    txtCity,
+                    food.imageUrlData,
+                    food.ratingNumberData,
+                    food.ratingData
+                )
+
+                myAdapter.updateFood(updatedFood, position)
+                dialog.dismiss()
+
+            }
+
+
+        }
+        dialogUpdateBinding.dialogUpdateBtnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+    override fun onFoodLongClicked(food: Food, position: Int) {
+
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogDeleteBinding = DialogDeleteItemBinding.inflate(layoutInflater)
+        dialog.setView(dialogDeleteBinding.root)
+        dialog.setCancelable(true)
+        dialog.show()
+
+        dialogDeleteBinding.dialogBtnDelete.setOnClickListener {
+            myAdapter.removeFood(food, position)
+            dialog.dismiss()
+        }
+
+
+        dialogDeleteBinding.dialogBtnDontDelete.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 }
 

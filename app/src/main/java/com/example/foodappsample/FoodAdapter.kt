@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
-class FoodAdapter(private val data: ArrayList<Food>) :
+class FoodAdapter(private val data: ArrayList<Food>, private val foodEvent: FoodEvents) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     inner class FoodViewHolder(itemView: View, private val context: Context) :
@@ -28,6 +28,7 @@ class FoodAdapter(private val data: ArrayList<Food>) :
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
+
             subject.text = data[position].subjectData
             city.text = data[position].cityData
             price.text = "$${data[position].priceData} vip"
@@ -39,8 +40,18 @@ class FoodAdapter(private val data: ArrayList<Food>) :
                 RoundedCornersTransformation(18, 6)
             ).into(image)
 
-        }
+            itemView.setOnClickListener {
+                foodEvent.onFoodClicked(
+                    data[adapterPosition],
+                    adapterPosition
+                )
+            }
+            itemView.setOnLongClickListener {
+                foodEvent.onFoodLongClicked(data[adapterPosition], adapterPosition)
+                true
+            }
 
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
@@ -64,5 +75,25 @@ class FoodAdapter(private val data: ArrayList<Food>) :
         // Add new item to recycler view
         data.add(0, newFood)
         notifyItemInserted(0)
+    }
+
+    fun removeFood(oldFood: Food, oldPosition: Int) {
+
+        // Removing food item from recycler view
+        data.remove(oldFood)
+        notifyItemRemoved(oldPosition)
+    }
+
+    fun updateFood(newFood: Food, position: Int) {
+
+        //Updating existing food items
+        data[position] = newFood
+        notifyItemChanged(position)
+    }
+
+    interface FoodEvents {
+
+        fun onFoodClicked(food: Food, position: Int)
+        fun onFoodLongClicked(food: Food, position: Int)
     }
 }
