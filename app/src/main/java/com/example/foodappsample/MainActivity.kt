@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodappsample.databinding.ActivityMainBinding
@@ -203,6 +204,29 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
         }
 
+
+        binding.edtSearch.addTextChangedListener { editTextInput ->
+
+            if (editTextInput!!.isNotEmpty()) {
+
+                // Filter Data
+                val cloneList = foodList.clone() as ArrayList<Food>
+
+                val filteredList = cloneList.filter { foodItem ->
+
+                    foodItem.subjectData.contains(editTextInput)
+                }
+                myAdapter.setData(filteredList as ArrayList<Food>)
+
+
+            } else {
+
+                // Show All Data :
+                myAdapter.setData(foodList.clone() as ArrayList<Food>)
+            }
+
+        }
+
     }
 
     override fun onFoodClicked(food: Food, position: Int) {
@@ -270,6 +294,10 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         dialogDeleteBinding.dialogBtnDontDelete.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    fun search() {
+
     }
 }
 
