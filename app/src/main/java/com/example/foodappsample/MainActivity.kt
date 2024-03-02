@@ -296,9 +296,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         }
     }
 
-    fun search() {
 
-    }
 }
 
 
