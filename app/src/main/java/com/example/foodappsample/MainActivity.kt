@@ -2,6 +2,7 @@ package com.example.foodappsample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,10 +17,12 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var myAdapter: FoodAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -294,6 +297,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         dialogDeleteBinding.dialogBtnDontDelete.setOnClickListener {
             dialog.dismiss()
         }
+
     }
 
 
